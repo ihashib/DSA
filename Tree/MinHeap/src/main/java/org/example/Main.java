@@ -17,13 +17,13 @@ public class Main {
         mh.heapAdd(10);
         mh.heapAdd(11);
 
-        mh.printHeap(); //print OK
+        mh.printHeap();
 
         mh.heapAdd(2);
 
         mh.printHeap();
 
-        mh.deleteValue(1);
+        mh.deleteMin();
 
         mh.printHeap();
 

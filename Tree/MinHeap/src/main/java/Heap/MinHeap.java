@@ -48,6 +48,23 @@ public class MinHeap {
         }
     }
 
+    private void buildMinHeap(){
+        int left, right;
+        for(int i = 0; i < heapPos-1; i++) {
+            left = 2*i + 1;
+            right = 2*i + 2;
+
+            if(heap[left] == 0 || heap[right] == 0)
+                break;
+
+            if(heap[i] > heap[left])
+                swap(i, left);
+            else if(heap[i] > heap[right])
+                swap(i, right);
+        }
+        heapify();
+    }
+
     public void printHeap(){
         for(int i = 0; i < heapPos; i++){
             System.out.print(heap[i]+" ");
@@ -55,7 +72,7 @@ public class MinHeap {
         System.out.println();
     }
 
-    private int findValue(int value){
+    public int findValue(int value){
         for(int i = 0; i < heapPos-1; i++){
             if(heap[i] == value)
                 return i;
@@ -63,16 +80,10 @@ public class MinHeap {
         return -1;
     }
 
-    public void deleteValue(int value){
-        //find the value in heap
-        //replace the value with the last value in heap
-        //replace the last value with 0 and dec heapPos
-        int valPos = findValue(value);
-        if(valPos != -1){
-             heap[valPos] = heap[heapPos-1];
-             heap[heapPos-1] = 0;
-             heapPos--;
-        }
-        heapify();
+    public void deleteMin(){
+        heap[0] = heap[heapPos-1];
+        heap[heapPos-1] = 0;
+        --heapPos;
+        buildMinHeap();
     }
 }
