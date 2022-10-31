@@ -23,6 +23,11 @@ public class Main {
         graph.addEdge(5, 1);
 
         //BFS
+        System.out.println("BFS: ");
         graph.BFS(0);
+
+        //DFS
+        System.out.println("DFS: ");
+        graph.DFSWrapper(0);
     }
 }

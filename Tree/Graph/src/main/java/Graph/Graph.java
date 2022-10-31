@@ -53,4 +53,24 @@ public class Graph {
             }
         }
     }
+
+    //dfs
+    public void DFSWrapper(int startNode){
+        boolean visited[] = new boolean[nodeCount];
+
+        DFS(startNode, visited);
+    }
+    private void DFS(int node, boolean visited[]){
+        visited[node] = true;
+
+        System.out.println("Current Node: "+ node);
+
+        for(int nextNode : adjList[node]){
+            if(!visited[nextNode]){
+                visited[nextNode] = true;
+
+                DFS(nextNode, visited);
+            }
+        }
+    }
 }
