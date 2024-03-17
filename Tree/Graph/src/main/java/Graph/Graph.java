@@ -1,31 +1,47 @@
 package Graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Graph {
     //adjacency list
-    private LinkedList<Integer> adjList[];      //created an array of linkedlist
+    private List<List<Integer>> adjList;      //created a list within a list of integer type
     //number of vertices present in graph
     private int nodeCount = 0;
 
-    //constructor, adding all the needed vertices
-    public Graph(int nodeCount){
-        this.nodeCount = nodeCount;
-        adjList = new LinkedList[nodeCount];    //array of linkedlist size
+    public Graph(){
+        adjList = new ArrayList<>();
+    }
 
-        for(int i = 0; i < nodeCount; i++){
-            //each node is a linked list
-            //the whole graph is an array of nodes that are linkedlist
-            //nodes are represented by linkedlist is because of the edges that need to connect
-            adjList[i] = new LinkedList<>();
+    public void addEdge(int sendingNode, int receiverNode) {
+        ensureNodeExists(sendingNode); 
+
+        if (receiverNode != -1 && !adjList.get(sendingNode).contains(receiverNode)) {
+            adjList.get(sendingNode).add(receiverNode);
+        } 
+    }
+
+    // Helper method to add a new node if it doesn't exist
+    private void ensureNodeExists(int nodeIndex) {
+        if (!isIndexValid(adjList, nodeIndex)) { 
+            adjList.add(nodeIndex, new ArrayList<>()); // Initialize with an empty list
         }
     }
 
-    //connecting each node with edges
-    public void addEdge(int node1, int node2){
-        //adding edges to a specific node, the node is an element of the array
-        //the edge info is saved in the linkedlist of that node element
-        adjList[node1].add(node2);
+
+    public boolean isIndexValid(List list, int index) {
+        return index >= 0 && index < list.size();
+    }
+
+    public void printGraph(){
+        int count = 0;
+        for(List<Integer> l : adjList){
+            System.out.println(count+" :"+l);
+            count++;
+        }
     }
 
     //bfs
@@ -44,8 +60,9 @@ public class Graph {
             System.out.println("Current Node: "+currentNode);
 
             //taking a iterator that iterates though the current node's connected node via edges
+            List<Integer> connectedVerticies = adjList.get(currentNode);
             //if the connected node is not visited, enqueue it
-            for (int nextNode : adjList[currentNode]) {
+            for (int nextNode : connectedVerticies) {
                 if (!visited[nextNode]) {
                     visited[nextNode] = true;
                     q.add(nextNode);
@@ -61,16 +78,48 @@ public class Graph {
         DFS(startNode, visited);
     }
     private void DFS(int node, boolean visited[]){
+        if(node == -1) return;
+
         visited[node] = true;
 
         System.out.println("Current Node: "+ node);
 
-        for(int nextNode : adjList[node]){
+        List<Integer> connectedVertecies = adjList.get(node);
+
+        for(int nextNode : connectedVertecies){
             if(!visited[nextNode]){
                 visited[nextNode] = true;
 
                 DFS(nextNode, visited);
             }
         }
+    }
+
+    //Topological sort
+    public List<Integer> topSort(){
+        List<Integer> order = new ArrayList<>();
+
+        //Assuming the nodes are numbers and starts from 0 to nodeCount
+        for(int it = nodeCount - 1; it >= 0; it--){
+            if(!order.contains(it))
+                order = dfsForTopSort(order, it);
+        }
+
+        return order;
+    }
+    //DFS wrapper for topological sort, to find the end of a subtree
+    public List<Integer> dfsForTopSort(List<Integer> order, int node){
+        Stack<Integer> stack = new Stack<>();
+        stack.push(node);
+        List<Integer> connected = adjList.get(node);
+
+        for(int connectedNode : connected){
+            if(!order.contains(connectedNode)){
+                stack.push(connectedNode);
+                order.add(connectedNode);
+            }
+        }
+
+        return order;
     }
 }
