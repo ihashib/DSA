@@ -99,45 +99,45 @@ public class Graph {
 
     //Topological sort
     public List<Integer> topSort(){
-        // We use DFS to go to the end of a subtree as in node
-        // with 0 dependent node while adding the visited nodes to the orderList
-        // The orderlist is then reversed as we want the list starting from the node with 
-        // 0 dependent nodes. The orderlist is then added the order and returned after all nodes are traversed
-
+        /*
+         * We traverse the graph using DFS at a random node till we find the end of the subtree
+         * The end of the subtree means, that node does not have any dependent nodes
+         * From the DFS algo, we use the visited list and reverse it, because we want the node with no dependency first
+         * Example= Graph: 1 -> 2 -> 3, visited[] = [1,2,3] -> reverse visited[] = [3,2,1] 
+         * Add the reversed visited to the order list 
+         * Return order list when all nodes are traversed
+         */
         List<Integer> order = new ArrayList<>();
 
-        //Assuming the nodes are numbers and starts from 0 to nodeCount
-        for(int it = nodeCount - 1; it >= 0; it--){
-            if(!order.contains(it)){
-                List<Integer> orderList = new ArrayList<>();
+        for(int vertex = 0; vertex < nodeCount; vertex++){
+            if(!order.contains(vertex)){
+                List<Integer> visited = new ArrayList<>();
+                dfsForTopSort(visited, vertex, order);
 
-                dfsForTopSort(orderList, it, order);  
-
-                Collections.reverse(orderList);
-                for(int i : orderList){
+                Collections.reverse(visited);
+                for(int i : visited)
                     order.add(i);
-                }
             }
         }
-
         Collections.reverse(order);
+
         return order;
     }
     //DFS wrapper for topological sort, to find the end of a subtree
-    public void dfsForTopSort(List<Integer> orderList, int node, List<Integer> order){
+    public void dfsForTopSort(List<Integer> visited, int vertex, List<Integer> order){
         Stack<Integer> stack = new Stack<>();
-        stack.push(node);
-        orderList.add(node);
+
+        stack.push(vertex);
+        visited.add(vertex);
 
         while(!stack.isEmpty()){
-            int popNode = stack.pop();
+            int popedVertex = stack.pop();
+            List<Integer> connectedVertecies = adjList.get(popedVertex);
 
-            List<Integer> connected = adjList.get(popNode);
-
-            for(int connectedNode : connected){
-                if(!order.contains(connectedNode) && !orderList.contains(connectedNode)){
-                    stack.push(connectedNode);
-                    orderList.add(connectedNode);
+            for(int connected : connectedVertecies){
+                if(!visited.contains(connected) && !order.contains(connected)){
+                    stack.push(connected);
+                    visited.add(connected);
                 }
             }
         }
