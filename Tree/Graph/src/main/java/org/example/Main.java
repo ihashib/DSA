@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         //create graph
         Graph graph = new Graph();
-        //undirected
+        //directed
         graph.addEdge(0, 2);
         graph.addEdge(0, 3);
         graph.addEdge(0, 6);

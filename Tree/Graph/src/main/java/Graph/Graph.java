@@ -1,6 +1,7 @@
 package Graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -28,6 +29,7 @@ public class Graph {
     private void ensureNodeExists(int nodeIndex) {
         if (!isIndexValid(adjList, nodeIndex)) { 
             adjList.add(nodeIndex, new ArrayList<>()); // Initialize with an empty list
+            nodeCount++;
         }
     }
 
@@ -99,27 +101,44 @@ public class Graph {
     public List<Integer> topSort(){
         List<Integer> order = new ArrayList<>();
 
+        int orderPos = nodeCount - 1;   // We use DFS to go to the end of a subtree as in node
+                                        // with 0 dependent node then start adding the order
+                                        // from the back as this node is at the bottom of the dependency tre
+
         //Assuming the nodes are numbers and starts from 0 to nodeCount
         for(int it = nodeCount - 1; it >= 0; it--){
-            if(!order.contains(it))
-                order = dfsForTopSort(order, it);
-        }
+            if(!order.contains(it)){
+                List<Integer> orderList = new ArrayList<>();
+                
+                dfsForTopSort(orderList, it, order);  
 
-        return order;
-    }
-    //DFS wrapper for topological sort, to find the end of a subtree
-    public List<Integer> dfsForTopSort(List<Integer> order, int node){
-        Stack<Integer> stack = new Stack<>();
-        stack.push(node);
-        List<Integer> connected = adjList.get(node);
-
-        for(int connectedNode : connected){
-            if(!order.contains(connectedNode)){
-                stack.push(connectedNode);
-                order.add(connectedNode);
+                Collections.reverse(orderList);
+                for(int i : orderList){
+                    order.add(i);
+                }
             }
         }
 
+        Collections.reverse(order);
         return order;
+    }
+    //DFS wrapper for topological sort, to find the end of a subtree
+    public void dfsForTopSort(List<Integer> orderList, int node, List<Integer> order){
+        Stack<Integer> stack = new Stack<>();
+        stack.push(node);
+        orderList.add(node);
+
+        while(!stack.isEmpty()){
+            int popNode = stack.pop();
+
+            List<Integer> connected = adjList.get(popNode);
+
+            for(int connectedNode : connected){
+                if(!order.contains(connectedNode) && !orderList.contains(connectedNode)){
+                    stack.push(connectedNode);
+                    orderList.add(connectedNode);
+                }
+            }
+        }
     }
 }
