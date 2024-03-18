@@ -106,6 +106,9 @@ public class Graph {
          * Example= Graph: 1 -> 2 -> 3, visited[] = [1,2,3] -> reverse visited[] = [3,2,1] 
          * Add the reversed visited to the order list 
          * Return order list when all nodes are traversed
+         * 
+         * NOTE 1: The graph (1 -> 2 -> 3) here represents, 1 depends on 2, 2 depends on 3 and 3 does not have dependencies
+         * NOTE 2: The graphs has to be Directed Acyclic Graph (DAG)
          */
         List<Integer> order = new ArrayList<>();
 
