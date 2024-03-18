@@ -99,17 +99,18 @@ public class Graph {
 
     //Topological sort
     public List<Integer> topSort(){
-        List<Integer> order = new ArrayList<>();
+        // We use DFS to go to the end of a subtree as in node
+        // with 0 dependent node while adding the visited nodes to the orderList
+        // The orderlist is then reversed as we want the list starting from the node with 
+        // 0 dependent nodes. The orderlist is then added the order and returned after all nodes are traversed
 
-        int orderPos = nodeCount - 1;   // We use DFS to go to the end of a subtree as in node
-                                        // with 0 dependent node then start adding the order
-                                        // from the back as this node is at the bottom of the dependency tre
+        List<Integer> order = new ArrayList<>();
 
         //Assuming the nodes are numbers and starts from 0 to nodeCount
         for(int it = nodeCount - 1; it >= 0; it--){
             if(!order.contains(it)){
                 List<Integer> orderList = new ArrayList<>();
-                
+
                 dfsForTopSort(orderList, it, order);  
 
                 Collections.reverse(orderList);
