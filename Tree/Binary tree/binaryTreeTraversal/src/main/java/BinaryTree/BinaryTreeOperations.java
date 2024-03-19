@@ -105,55 +105,70 @@ public class BinaryTreeOperations {
 
     // First common ancestor / Least common ancestor
     public int fca(Node node1, Node node2){
-        int fcaNode = -1;
+        /*
+        * Find the 2 node's shortest paths from root using bfs
+        * Keep the paths, compare both and find the last same nodes from both node's paths
+        * The last same node is the first common ancestor
+        * Example:
+        * Node 1 path: 1 2 5 6 7
+        * Node 2 path: 1 2 5 0 9
+        * So here the FCA is node 5
+        * Note: fca -1 means there's no fca
+        */
+        int fca = -1;
+        List<Integer> node1Path;
+        List<Integer> node2Path;
 
-        List<Integer> path1 = bfsSearch(node1);
-        List<Integer> path2 = bfsSearch(node2);
+        node1Path = shortestPathFromRoot(node1);
+        node2Path = shortestPathFromRoot(node2);
 
-        System.out.println("Node 1 path: "+path1);
-        System.out.println("Node 2 path: "+path2);
-
-        int minPathSize = Math.min(path1.size(), path2.size());
+        int minPathSize = Math.min(node1Path.size(), node2Path.size());
 
         for(int i = 0; i < minPathSize; i++){
-            if(path1.get(i) == path2.get(i)){
-                fcaNode = path1.get(i);
-            }
+            if(node1Path.get(i) == node2Path.get(i))
+                fca = node1Path.get(i);
+            else    
+                break;
         }
 
-        return fcaNode;
+        return fca;
     }
-    // Helper bfs method
-    public List<Integer> bfsSearch(Node nodeToFind){
+    private List<Integer> shortestPathFromRoot(Node node){
+        List<Integer> path = new ArrayList<>();
         HashMap<Node, Node> parent = new HashMap<>();
         Queue<Node> q = new LinkedList<>();
-        List<Integer> path = new ArrayList<>();
 
-        q.add(root);
+        q.offer(root);
         parent.put(root, null);
 
         while(!q.isEmpty()){
-            Node node = q.remove();
+            Node current = q.remove();
 
-            if(nodeToFind.value == node.value){
-                while(node != null){
-                    path.add(0, node.value);
-                    node = parent.get(node);
+            if(node.value == current.value){
+                // Backtrack to parent and add to path
+                while(current != null){
+                    path.add(0, current.value);
+                    current = parent.get(current);
                 }
                 return path;
             }
 
-            if(node.left != null){
-                q.add(node.left);
-                parent.put(node.left, node);
+            if(current.left != null){
+                q.offer(current.left);
+
+                // keep parent info of the child node
+                parent.put(current.left, current);
             }
-            if(node.right != null){
-                q.add(node.right); 
-                parent.put(node.right, node);  
+            if(current.right != null){
+                q.offer(current.right);
+
+                // keep parent info of the child node
+                parent.put(current.right, current);
             }
         }
 
         return path;
     }
+    
 
 }

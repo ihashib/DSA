@@ -29,7 +29,7 @@ public class Main {
         bto.printInOrder();
         bto.printPostOrder();
 
-        Node node1 = bto.findValue(0);
+        Node node1 = bto.findValue(6);
         Node node2 = bto.findValue(9);
 
         System.out.println();
