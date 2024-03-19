@@ -1,5 +1,12 @@
 package BinaryTree;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
+
 public class BinaryTreeOperations {
     Node root;
     //insert
@@ -32,14 +39,14 @@ public class BinaryTreeOperations {
     }
 
     //find
-    public boolean findValue(int value){
+    public Node findValue(int value){
         return find(root, value);
     }
-    private boolean find(Node node, int value){
+    private Node find(Node node, int value){
         if(node == null)
-            return false;
+            return null;
         if(node.value == value)
-            return true;
+            return node;
 
         return node.value > value?find(node.left, value):find(node.right, value);
     }
@@ -94,6 +101,59 @@ public class BinaryTreeOperations {
         postPrint(node.right);
 
         System.out.print(node.value+" ");
+    }
+
+    // First common ancestor / Least common ancestor
+    public int fca(Node node1, Node node2){
+        int fcaNode = -1;
+
+        List<Integer> path1 = bfsSearch(node1);
+        List<Integer> path2 = bfsSearch(node2);
+
+        System.out.println("Node 1 path: "+path1);
+        System.out.println("Node 2 path: "+path2);
+
+        int minPathSize = Math.min(path1.size(), path2.size());
+
+        for(int i = 0; i < minPathSize; i++){
+            if(path1.get(i) == path2.get(i)){
+                fcaNode = path1.get(i);
+            }
+        }
+
+        return fcaNode;
+    }
+    // Helper bfs method
+    public List<Integer> bfsSearch(Node nodeToFind){
+        HashMap<Node, Node> parent = new HashMap<>();
+        Queue<Node> q = new LinkedList<>();
+        List<Integer> path = new ArrayList<>();
+
+        q.add(root);
+        parent.put(root, null);
+
+        while(!q.isEmpty()){
+            Node node = q.remove();
+
+            if(nodeToFind.value == node.value){
+                while(node != null){
+                    path.add(0, node.value);
+                    node = parent.get(node);
+                }
+                return path;
+            }
+
+            if(node.left != null){
+                q.add(node.left);
+                parent.put(node.left, node);
+            }
+            if(node.right != null){
+                q.add(node.right); 
+                parent.put(node.right, node);  
+            }
+        }
+
+        return path;
     }
 
 }
