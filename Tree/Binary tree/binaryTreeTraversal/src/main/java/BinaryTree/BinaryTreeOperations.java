@@ -1,6 +1,7 @@
 package BinaryTree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,10 +10,43 @@ import java.util.Stack;
 
 public class BinaryTreeOperations {
     Node root;
+
+    public BinaryTreeOperations(){
+        this.root = null;
+    }
+
+    public Node getRoot(){
+        return this.root;
+    }
+
+    //Build BST from sorted accending array
+    public Node buildMinimalBst(int[] bstArr){
+        if(bstArr.length == 0) return null;
+
+        root = minimalBstUtil(bstArr, 0, bstArr.length-1);
+
+        return root;
+    }
+    // Minimal bst builder util
+    private Node minimalBstUtil(int[] arr, int start, int end){
+        if(start > end) return null;
+
+        int mid = (start + end)/2;
+
+        Node node = new Node(arr[mid]);
+
+        node.left = minimalBstUtil(arr, start, mid - 1);
+        node.right = minimalBstUtil(arr, mid + 1, end);
+
+        return node;
+    }
+    
     //insert
-    public void addNode(int value){
+    public Node addNode(int value){
         //start from root
         root = recursiveAdd(root, value);
+
+        return root;
     }
     private Node recursiveAdd(Node current, int value){
         /*
@@ -21,20 +55,19 @@ public class BinaryTreeOperations {
             when the current node is null, we've reached a leaf node and we can insert the new node in that position
          */
         if(current == null){
-            System.out.println("Inserting: "+ value);
+            System.out.println("Inserted: "+value);
             return new Node(value);
         }
 
         if(current.value > value){
             current.left = recursiveAdd(current.left, value);
+            //System.out.println("Left");
         }
         if(current.value < value){
             current.right = recursiveAdd(current.right, value);
+            //System.out.println("Right");
         }
-        else{
-            System.out.println("Value already exists");
-        }
-        //if value already exists
+
         return current;
     }
 
@@ -133,6 +166,8 @@ public class BinaryTreeOperations {
 
         return fca;
     }
+
+    // Helper method using bfs to find shortest path from root
     private List<Integer> shortestPathFromRoot(Node node){
         List<Integer> path = new ArrayList<>();
         HashMap<Node, Node> parent = new HashMap<>();
@@ -168,6 +203,35 @@ public class BinaryTreeOperations {
         }
 
         return path;
+    }
+
+    // test bst sequence
+    public List<List<Integer>> weaveSubtrees(Node node) {
+        if (node == null) {
+            List<List<Integer>> result = new ArrayList<>();
+            result.add(new ArrayList<>()); // Empty array for an empty subtree
+            System.out.println("OH NOOO===========");
+            return result;  
+        }
+
+        List<List<Integer>> leftArrays = weaveSubtrees(node.left);
+        List<List<Integer>> rightArrays = weaveSubtrees(node.right);
+
+        List<List<Integer>> result = new ArrayList<>();
+        for (List<Integer> left : leftArrays) {
+            for (List<Integer> right : rightArrays) {
+                for (int i = 0; i < left.size() + right.size(); i++) {
+                    List<Integer> woven = new ArrayList<>();
+                    woven.add(node.value); 
+                    woven.addAll(left.subList(0, i));
+                    woven.addAll(right.subList(0, i < left.size() ? right.size() : right.size() - (i - left.size()))); //Adjusted index calculation
+                    woven.addAll(left.subList(i, left.size()));
+                    System.out.println("woven: "+woven);
+                    result.add(woven);
+                }
+            }
+        }
+        return result;
     }
     
 
