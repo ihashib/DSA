@@ -68,12 +68,12 @@ public class Main {
 
         
 
-        Node root = bto1.getRoot();
-        System.out.println("BST Root: "+root.value);
+        // Node root = bto1.getRoot();
+        // System.out.println("BST Root: "+root.value);
 
-        List<List<Integer>> list = bto1.weaveSubtrees(root);
+        // List<List<Integer>> list = bto1.weaveSubtrees(root);
 
-        System.out.println("BST Sequence");
-        System.out.println(list);
+        // System.out.println("BST Sequence");
+        // System.out.println(list);
     }
 }

@@ -206,33 +206,33 @@ public class BinaryTreeOperations {
     }
 
     // test bst sequence
-    public List<List<Integer>> weaveSubtrees(Node node) {
-        if (node == null) {
-            List<List<Integer>> result = new ArrayList<>();
-            result.add(new ArrayList<>()); // Empty array for an empty subtree
-            System.out.println("OH NOOO===========");
-            return result;  
-        }
+    // public List<List<Integer>> weaveSubtrees(Node node) {
+    //     if (node == null) {
+    //         List<List<Integer>> result = new ArrayList<>();
+    //         result.add(new ArrayList<>()); // Empty array for an empty subtree
+    //         System.out.println("OH NOOO===========");
+    //         return result;  
+    //     }
 
-        List<List<Integer>> leftArrays = weaveSubtrees(node.left);
-        List<List<Integer>> rightArrays = weaveSubtrees(node.right);
+    //     List<List<Integer>> leftArrays = weaveSubtrees(node.left);
+    //     List<List<Integer>> rightArrays = weaveSubtrees(node.right);
 
-        List<List<Integer>> result = new ArrayList<>();
-        for (List<Integer> left : leftArrays) {
-            for (List<Integer> right : rightArrays) {
-                for (int i = 0; i < left.size() + right.size(); i++) {
-                    List<Integer> woven = new ArrayList<>();
-                    woven.add(node.value); 
-                    woven.addAll(left.subList(0, i));
-                    woven.addAll(right.subList(0, i < left.size() ? right.size() : right.size() - (i - left.size()))); //Adjusted index calculation
-                    woven.addAll(left.subList(i, left.size()));
-                    System.out.println("woven: "+woven);
-                    result.add(woven);
-                }
-            }
-        }
-        return result;
-    }
+    //     List<List<Integer>> result = new ArrayList<>();
+    //     for (List<Integer> left : leftArrays) {
+    //         for (List<Integer> right : rightArrays) {
+    //             for (int i = 0; i < left.size() + right.size(); i++) {
+    //                 List<Integer> woven = new ArrayList<>();
+    //                 woven.add(node.value); 
+    //                 woven.addAll(left.subList(0, i));
+    //                 woven.addAll(right.subList(0, i < left.size() ? right.size() : right.size() - (i - left.size()))); //Adjusted index calculation
+    //                 woven.addAll(left.subList(i, left.size()));
+    //                 System.out.println("woven: "+woven);
+    //                 result.add(woven);
+    //             }
+    //         }
+    //     }
+    //     return result;
+    // }
     
 
 }
