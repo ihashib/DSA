@@ -137,7 +137,7 @@ public class BinaryTreeOperations {
     }
 
     // First common ancestor / Least common ancestor
-    public int fca(Node node1, Node node2){
+    public int getFirstCommonAncestor(Node node1, Node node2){
         /*
         * Find the 2 node's shortest paths from root using bfs
         * Keep the paths, compare both and find the last same nodes from both node's paths
@@ -205,34 +205,38 @@ public class BinaryTreeOperations {
         return path;
     }
 
-    // test bst sequence
-    // public List<List<Integer>> weaveSubtrees(Node node) {
-    //     if (node == null) {
-    //         List<List<Integer>> result = new ArrayList<>();
-    //         result.add(new ArrayList<>()); // Empty array for an empty subtree
-    //         System.out.println("OH NOOO===========");
-    //         return result;  
-    //     }
+    // Generate all possible lists that can be used to build the current BST
+    public List<List<Integer>> generateAllBstList(Node node) {
+        if (node == null) {
+            List<List<Integer>> result = new ArrayList<>();
+            result.add(new ArrayList<>()); // Empty array for an empty subtree
+            return result;
+        }
 
-    //     List<List<Integer>> leftArrays = weaveSubtrees(node.left);
-    //     List<List<Integer>> rightArrays = weaveSubtrees(node.right);
+        List<List<Integer>> leftArrays = generateAllBstList(node.left);
+        List<List<Integer>> rightArrays = generateAllBstList(node.right);
 
-    //     List<List<Integer>> result = new ArrayList<>();
-    //     for (List<Integer> left : leftArrays) {
-    //         for (List<Integer> right : rightArrays) {
-    //             for (int i = 0; i < left.size() + right.size(); i++) {
-    //                 List<Integer> woven = new ArrayList<>();
-    //                 woven.add(node.value); 
-    //                 woven.addAll(left.subList(0, i));
-    //                 woven.addAll(right.subList(0, i < left.size() ? right.size() : right.size() - (i - left.size()))); //Adjusted index calculation
-    //                 woven.addAll(left.subList(i, left.size()));
-    //                 System.out.println("woven: "+woven);
-    //                 result.add(woven);
-    //             }
-    //         }
-    //     }
-    //     return result;
-    // }
-    
 
+        List<List<Integer>> result = new ArrayList<>();
+        for (List<Integer> left : leftArrays) {
+            for (List<Integer> right : rightArrays) {
+                for (int i = 0; i < left.size() + right.size(); i++) {
+                    List<Integer> woven = new ArrayList<>();
+                    woven.add(node.value); // Add the root element
+
+                    woven.addAll(left.subList(0, i));
+
+                    // Adjusted calculation ensures right elements are added within BST property constraints
+                    woven.addAll(right.subList(0, i < left.size() ? right.size() : right.size() - (i - left.size()))); 
+
+                    woven.addAll(left.subList(i, left.size()));
+                    System.out.println(woven);
+                    result.add(woven);
+                }
+            }
+        }
+        return result;
+    }
+    // Util method for weaving the bst arrays
+    private List<List<Integer>> weaveSubtrees(Node node, )
 }

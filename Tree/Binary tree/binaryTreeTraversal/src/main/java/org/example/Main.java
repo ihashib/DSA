@@ -7,73 +7,53 @@ import BinaryTree.Node;
 
 public class Main {
     public static void main(String[] args) {
-        BinaryTreeOperations bto = new BinaryTreeOperations();
+        System.out.println("START BST0 ====================");
+        BinaryTreeOperations bst0 = new BinaryTreeOperations();
 
-        /*
-                     5
-                    / \
-                   2   7
-                  / \ / \
-                 0  4 6  8
-                          \
-                           9
-         */
         // 1 2 3 4 5 6 7 8 9 10 11 12
-        // 1 2   4 5   7 8  10 11 12 
-        bto.addNode(6);
-        bto.addNode(3);
-        bto.addNode(9);
-        bto.addNode(7);
-        bto.addNode(8);
-        bto.addNode(11);
-        bto.addNode(10);
-        bto.addNode(12);
-        bto.addNode(1);
-        bto.addNode(2);
-        bto.addNode(4);
-        bto.addNode(5);
+        bst0.addNode(6);
+        bst0.addNode(3);
+        bst0.addNode(9);
+        bst0.addNode(7);
+        bst0.addNode(8);
+        bst0.addNode(11);
+        bst0.addNode(10);
+        bst0.addNode(12);
+        bst0.addNode(1);
+        bst0.addNode(2);
+        bst0.addNode(4);
+        bst0.addNode(5);
 
-        System.out.println("BST root: "+bto.getRoot().value);
+        System.out.println("BST root: "+bst0.getRoot().value);
 
-        bto.printPreOrder();
-        bto.printInOrder();
-        bto.printPostOrder();
+        bst0.printPreOrder();
+        bst0.printInOrder();
+        bst0.printPostOrder();
 
-        Node node1 = bto.findValue(2);
-        Node node2 = bto.findValue(5);
+        Node node1 = bst0.findValue(2);
+        Node node2 = bst0.findValue(5);
 
         System.out.println();
-        System.out.println("First common ancestor: "+bto.fca(node1, node2));
+        System.out.println("First common ancestor: "+bst0.getFirstCommonAncestor(node1, node2));
 
-        System.out.println("START BTO1 ====================");
+        System.out.println("END BST1 ==============");
 
-        BinaryTreeOperations bto1 = new BinaryTreeOperations();
+        System.out.println("START BST1 ====================");
 
-        /*
-                     5
-                    / \
-                   2   7
-                  / \ / \
-                 0  4 6  8
-                          \
-                           9
-         */
+        BinaryTreeOperations bst1 = new BinaryTreeOperations();
         int[] bstArray = new int[] {1,2,3,4,5,6,7,8,9,10,11,12};
-        bto1.buildMinimalBst(bstArray);
 
-        
+        bst1.buildMinimalBst(bstArray);
 
-        bto1.printInOrder();
-        bto1.printPreOrder();
+        bst1.printInOrder();
+        bst1.printPreOrder();
 
-        
+        Node bst1Root = bst1.getRoot();
+        System.out.println("\nBST Root: "+bst1Root.value);
 
-        // Node root = bto1.getRoot();
-        // System.out.println("BST Root: "+root.value);
+        List<List<Integer>> list = bst1.generateAllBstList(bst1Root);
 
-        // List<List<Integer>> list = bto1.weaveSubtrees(root);
-
-        // System.out.println("BST Sequence");
-        // System.out.println(list);
+        System.out.println("BST Sequence");
+        System.out.println(list);
     }
 }
